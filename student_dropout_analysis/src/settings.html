@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - Student Dropout Analysis</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #68D391;
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #68D391;
+        }
+        .dark-mode {
+            background-color: #1a202c;
+            color: #e2e8f0;
+        }
+        .dark-mode .bg-white {
+            background-color: #2d3748;
+        }
+        .dark-mode .text-gray-700 {
+            color: #a0aec0;
+        }
+        .dark-mode .text-gray-800 {
+            color: #e2e8f0;
+        }
+        .dark-mode .border {
+            border-color: #4a5568;
+        }
+        .dark-mode .focus:ring-2 {
+            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5);
+        }
+        .dark-mode .hover:bg-green-600 {
+            background-color: #38a169;
+        }
+        .dark-mode .hover:bg-blue-700 {
+            background-color: #2b6cb0;
+        }
+        .dark-mode .bg-green-500 {
+            background-color: #48bb78;
+        }
+        .dark-mode .bg-blue-600 {
+            background-color: #4299e1;
+        }
+        .dark-mode .ring-2 {
+            box-shadow: 0 0 0 2px rgba(96, 165, 250, 0.5);
+        }
+        .dark-mode select {
+            background-color: #2d3748;
+            color: #e2e8f0;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-gradient-to-r from-blue-700 to-indigo-800 text-white shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <a href="index.html" class="flex items-center space-x-2 text-white hover:text-gray-200 bg-blue-700 hover:bg-blue-800 px-4 py-2 rounded-lg transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                        </svg>
+                        <span>Home</span>
+                    </a>
+                    <img src="images/settings-icon.svg" alt="Settings" class="w-10 h-10">
+                    <h1 class="text-2xl font-bold">System Settings</h1>
+                </div>
+                <div class="flex items-center space-x-6">
+                    <button id="saveSettingsBtn" class="flex items-center space-x-2 px-4 py-2 bg-green-500 hover:bg-green-600 rounded-lg transition-all duration-300">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                        </svg>
+                        <span>Save Changes</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-6 py-8">
+        <div class="max-w-4xl mx-auto">
+            <!-- Settings Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- General Settings -->
+                <div class="bg-white rounded-xl p-6 shadow-sm card-hover">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-6">General Settings</h3>
+                    <div class="space-y-6">
+                        <!-- Language Preference -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Language</label>
+                            <select id="languageSelect" class="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="en">English</option>
+                                <option value="es">Español</option>
+                                <option value="fr">Français</option>
+                            </select>
+                        </div>
+                        <!-- Time Zone -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Time Zone</label>
+                            <select id="timeZoneSelect" class="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="utc">UTC (GMT+0)</option>
+                                <option value="est">EST (GMT-5)</option>
+                                <option value="pst">PST (GMT-8)</option>
+                            </select>
+                        </div>
+                        <!-- Date Format -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Date Format</label>
+                            <select id="dateFormatSelect" class="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="mdy">MM/DD/YYYY</option>
+                                <option value="dmy">DD/MM/YYYY</option>
+                                <option value="ymd">YYYY-MM-DD</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notification Settings -->
+                <div class="bg-white rounded-xl p-6 shadow-sm card-hover">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-6">Notification Settings</h3>
+                    <div class="space-y-6">
+                        <!-- Email Notifications -->
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h4 class="text-sm font-medium text-gray-700">Email Notifications</h4>
+                                <p class="text-xs text-gray-500 mt-1">Receive updates via email</p>
+                            </div>
+                            <div class="relative inline-block w-12 mr-2 align-middle select-none">
+                                <input type="checkbox" name="toggle" id="emailToggle" checked class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer right-6">
+                                <label for="emailToggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+                            </div>
+                        </div>
+                        <!-- Push Notifications -->
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h4 class="text-sm font-medium text-gray-700">Push Notifications</h4>
+                                <p class="text-xs text-gray-500 mt-1">Get browser notifications</p>
+                            </div>
+                            <div class="relative inline-block w-12 mr-2 align-middle select-none">
+                                <input type="checkbox" name="toggle" id="pushToggle" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer right-6">
+                                <label for="pushToggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+                            </div>
+                        </div>
+                        <!-- SMS Notifications -->
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h4 class="text-sm font-medium text-gray-700">SMS Notifications</h4>
+                                <p class="text-xs text-gray-500 mt-1">Get text message alerts</p>
+                            </div>
+                            <div class="relative inline-block w-12 mr-2 align-middle select-none">
+                                <input type="checkbox" name="toggle" id="smsToggle" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer right-6">
+                                <label for="smsToggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Data Settings -->
+                <div class="bg-white rounded-xl p-6 shadow-sm card-hover">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-6">Data Settings</h3>
+                    <div class="space-y-6">
+                        <!-- Data Retention -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Data Retention Period</label>
+                            <select id="dataRetentionSelect" class="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="6">6 Months</option>
+                                <option value="12">1 Year</option>
+                                <option value="24">2 Years</option>
+                                <option value="36">3 Years</option>
+                            </select>
+                        </div>
+                        <!-- Data Export Format -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Default Export Format</label>
+                            <select id="exportFormatSelect" class="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="csv">CSV</option>
+                                <option value="excel">Excel</option>
+                                <option value="pdf">PDF</option>
+                            </select>
+                        </div>
+                        <!-- Data Backup -->
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h4 class="text-sm font-medium text-gray-700">Automatic Backup</h4>
+                                <p class="text-xs text-gray-500 mt-1">Weekly data backup</p>
+                            </div>
+                            <div class="relative inline-block w-12 mr-2 align-middle select-none">
+                                <input type="checkbox" name="toggle" id="backupToggle" checked class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer right-6">
+                                <label for="backupToggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Theme Settings -->
+                <div class="bg-white rounded-xl p-6 shadow-sm card-hover">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-6">Theme Settings</h3>
+                    <div class="space-y-6">
+                        <!-- Color Theme -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Color Theme</label>
+                            <div id="colorThemeButtons" class="grid grid-cols-4 gap-4">
+                                <button class="w-full h-10 rounded-lg bg-blue-600 hover:ring-2 hover:ring-blue-400 transition-all" data-theme="blue"></button>
+                                <button class="w-full h-10 rounded-lg bg-green-600 hover:ring-2 hover:ring-green-400 transition-all" data-theme="green"></button>
+                                <button class="w-full h-10 rounded-lg bg-purple-600 hover:ring-2 hover:ring-purple-400 transition-all" data-theme="purple"></button>
+                                <button class="w-full h-10 rounded-lg bg-red-600 hover:ring-2 hover:ring-red-400 transition-all" data-theme="red"></button>
+                            </div>
+                        </div>
+                        <!-- Dark Mode -->
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h4 class="text-sm font-medium text-gray-700">Dark Mode</h4>
+                                <p class="text-xs text-gray-500 mt-1">Use dark theme</p>
+                            </div>
+                            <div class="relative inline-block w-12 mr-2 align-middle select-none">
+                                <input type="checkbox" name="toggle" id="darkModeToggle" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer right-6">
+                                <label for="darkModeToggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+                            </div>
+                        </div>
+                        <!-- Font Size -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Font Size</label>
+                            <select id="fontSizeSelect" class="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="sm">Small</option>
+                                <option value="md" selected>Medium</option>
+                                <option value="lg">Large</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const saveBtn = document.getElementById('saveSettingsBtn');
+            let settings = {
+                language: 'en',
+                timeZone: 'utc',
+                dateFormat: 'mdy',
+                emailNotifications: true,
+                pushNotifications: false,
+                smsNotifications: false,
+                dataRetention: '6',
+                exportFormat: 'csv',
+                backupEnabled: true,
+                colorTheme: 'blue',
+                darkMode: false,
+                fontSize: 'md'
+            };
+
+            // Update UI based on settings
+            function updateUI() {
+                document.getElementById('languageSelect').value = settings.language;
+                document.getElementById('timeZoneSelect').value = settings.timeZone;
+                document.getElementById('dateFormatSelect').value = settings.dateFormat;
+                document.getElementById('emailToggle').checked = settings.emailNotifications;
+                document.getElementById('pushToggle').checked = settings.pushNotifications;
+                document.getElementById('smsToggle').checked = settings.smsNotifications;
+                document.getElementById('dataRetentionSelect').value = settings.dataRetention;
+                document.getElementById('exportFormatSelect').value = settings.exportFormat;
+                document.getElementById('backupToggle').checked = settings.backupEnabled;
+                document.querySelector(`#colorThemeButtons button[data-theme="${settings.colorTheme}"]`).classList.add('ring-2');
+                document.getElementById('darkModeToggle').checked = settings.darkMode;
+                document.getElementById('fontSizeSelect').value = settings.fontSize;
+
+                // Apply dark mode
+                if (settings.darkMode) {
+                    document.body.classList.add('dark-mode');
+                } else {
+                    document.body.classList.remove('dark-mode');
+                }
+
+                // Apply font size
+                document.body.style.fontSize = settings.fontSize === 'sm' ? '14px' : settings.fontSize === 'lg' ? '18px' : '16px';
+            }
+
+            // Event Listeners
+            document.getElementById('languageSelect').addEventListener('change', function(e) {
+                settings.language = e.target.value;
+            });
+
+            document.getElementById('timeZoneSelect').addEventListener('change', function(e) {
+                settings.timeZone = e.target.value;
+            });
+
+            document.getElementById('dateFormatSelect').addEventListener('change', function(e) {
+                settings.dateFormat = e.target.value;
+            });
+
+            document.getElementById('emailToggle').addEventListener('change', function(e) {
+                settings.emailNotifications = e.target.checked;
+            });
+
+            document.getElementById('pushToggle').addEventListener('change', function(e) {
+                settings.pushNotifications = e.target.checked;
+            });
+
+            document.getElementById('smsToggle').addEventListener('change', function(e) {
+                settings.smsNotifications = e.target.checked;
+            });
+
+            document.getElementById('dataRetentionSelect').addEventListener('change', function(e) {
+                settings.dataRetention = e.target.value;
+            });
+
+            document.getElementById('exportFormatSelect').addEventListener('change', function(e) {
+                settings.exportFormat = e.target.value;
+            });
+
+            document.getElementById('backupToggle').addEventListener('change', function(e) {
+                settings.backupEnabled = e.target.checked;
+            });
+
+            const colorThemeButtons = document.querySelectorAll('#colorThemeButtons button');
+            colorThemeButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    colorThemeButtons.forEach(btn => btn.classList.remove('ring-2'));
+                    this.classList.add('ring-2');
+                    settings.colorTheme = this.getAttribute('data-theme');
+                    document.documentElement.style.setProperty('--theme-color', getComputedStyle(this).backgroundColor);
+                });
+            });
+
+            document.getElementById('darkModeToggle').addEventListener('change', function(e) {
+                settings.darkMode = e.target.checked;
+                updateUI();
+            });
+
+            document.getElementById('fontSizeSelect').addEventListener('change', function(e) {
+                settings.fontSize = e.target.value;
+                updateUI();
+            });
+
+            // Save Button Handler
+            saveBtn.addEventListener('click', function() {
+                saveBtn.disabled = true;
+                saveBtn.innerHTML = `
+                    <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    <span class="ml-2">Saving...</span>
+                `;
+
+                setTimeout(() => {
+                    saveBtn.disabled = false;
+                    saveBtn.innerHTML = `
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                        </svg>
+                        <span>Save Changes</span>
+                    `;
+                    const toast = document.createElement('div');
+                    toast.className = 'fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg transform transition-all duration-500 translate-y-0';
+                    toast.textContent = 'Settings updated successfully!';
+                    document.body.appendChild(toast);
+                    setTimeout(() => {
+                        toast.classList.add('translate-y-full', 'opacity-0');
+                        setTimeout(() => toast.remove(), 500);
+                    }, 3000);
+                }, 1500);
+            });
+
+            // Initial UI update
+            updateUI();
+        });
+    </style>
+</body>
+</html>

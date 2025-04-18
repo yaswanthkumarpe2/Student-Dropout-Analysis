@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intervention Success Rates - Student Analysis</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #10B981, #059669);
+        }
+        .progress-bar {
+            transition: width 1s ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="gradient-bg text-white shadow-lg">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <a href="analytics.html" class="text-white hover:text-gray-200">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                        </svg>
+                    </a>
+                    <h1 class="text-2xl font-bold">Programming Languages Success Rates</h1>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-6 py-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Bar Chart -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h2 class="text-xl font-semibold mb-4">Success Rate Visualization</h2>
+                <canvas id="successChart"></canvas>
+            </div>
+
+            <!-- Progress Bars -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h2 class="text-xl font-semibold mb-4">Detailed Success Rates</h2>
+                <div class="space-y-4" id="progressBars">
+                    <!-- Progress bars will be added here by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const programmingData = [
+            { language: 'HTML', rate: 90 },
+            { language: 'R Language', rate: 88 },
+            { language: 'Java', rate: 78 },
+            { language: 'C', rate: 78 },
+            { language: 'C++', rate: 77 },
+            { language: 'CSS', rate: 69 },
+            { language: 'Python', rate: 65 },
+            { language: 'MySQL', rate: 62 },
+            { language: 'DSA', rate: 52 }
+        ].sort((a, b) => b.rate - a.rate); // Sort by success rate descending
+
+        // Initialize Chart
+        const ctx = document.getElementById('successChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: programmingData.map(item => item.language),
+                datasets: [{
+                    label: 'Success Rate (%)',
+                    data: programmingData.map(item => item.rate),
+                    backgroundColor: 'rgba(16, 185, 129, 0.8)',
+                    borderColor: 'rgba(5, 150, 105, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        title: {
+                            display: true,
+                            text: 'Success Rate (%)'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+
+        // Create Progress Bars
+        const progressBarsContainer = document.getElementById('progressBars');
+        programmingData.forEach(item => {
+            const progressBarHtml = `
+                <div class="space-y-2">
+                    <div class="flex justify-between">
+                        <span class="font-medium">${item.language}</span>
+                        <span class="font-medium">${item.rate}%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2.5">
+                        <div class="progress-bar bg-emerald-500 h-2.5 rounded-full" style="width: ${item.rate}%"></div>
+                    </div>
+                </div>
+            `;
+            progressBarsContainer.innerHTML += progressBarHtml;
+        });
+    </script>
+</body>
+</html>

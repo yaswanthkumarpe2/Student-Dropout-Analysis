@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Total Dropouts - Student Analysis</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Add jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Add DataTables -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #4F46E5, #7C3AED);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="gradient-bg text-white shadow-lg">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <a href="analytics.html" class="text-white hover:text-gray-200">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                        </svg>
+                    </a>
+                    <h1 class="text-2xl font-bold">Total Dropouts (1,284)</h1>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-6 py-8">
+        <div class="bg-white rounded-lg shadow-lg p-6">
+            <table id="dropoutTable" class="w-full">
+                <thead>
+                    <tr class="bg-gray-100">
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Class</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Section</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Roll No</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Data will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <script>
+        // First names and last names for random generation
+        const firstNames = ['Aarav', 'Aditi', 'Arjun', 'Anaya', 'Dev', 'Diya', 'Ishaan', 'Isha', 'Kabir', 'Kiara', 
+                          'Laksh', 'Mira', 'Neil', 'Neha', 'Om', 'Pari', 'Rehan', 'Riya', 'Samar', 'Sara'];
+        const lastNames = ['Sharma', 'Patel', 'Kumar', 'Singh', 'Verma', 'Gupta', 'Shah', 'Mehta', 'Joshi', 'Reddy'];
+        const sections = ['A', 'B', 'C', 'D'];
+        const classes = ['9', '10', '11', '12'];
+
+        // Generate random student data
+        function generateStudents() {
+            const students = [];
+            for (let i = 0; i < 1284; i++) {
+                const firstName = firstNames[Math.floor(Math.random() * firstNames.length)];
+                const lastName = lastNames[Math.floor(Math.random() * lastNames.length)];
+                const section = sections[Math.floor(Math.random() * sections.length)];
+                const className = classes[Math.floor(Math.random() * classes.length)];
+                const rollNo = Math.floor(Math.random() * 60) + 1;
+
+                students.push({
+                    name: `${firstName} ${lastName}`, // Corrected template literal usage
+                    class: className,
+                    section: section,
+                    roll_no: rollNo
+                });
+            }
+            return students;
+        }
+
+        // Initialize DataTable with generated data
+        $(document).ready(function() {
+            const students = generateStudents();
+            $('#dropoutTable').DataTable({
+                data: students,
+                columns: [
+                    { data: 'name' },
+                    { data: 'class' },
+                    { data: 'section' },
+                    { data: 'roll_no' }
+                ],
+                pageLength: 25,
+                order: [[1, 'asc'], [2, 'asc'], [3, 'asc']],
+                responsive: true,
+                language: {
+                    search: "Search students:",
+                    lengthMenu: "Show _MENU_ students per page",
+                    info: "Showing _START_ to _END_ of _TOTAL_ dropout students"
+                }
+            });
+        });
+    </script>
+</body>
+</html>

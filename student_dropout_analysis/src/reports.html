@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports - Student Dropout Analysis</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .glassmorphism {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-gradient-to-r from-blue-700 to-indigo-800 text-white shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <a href="index.html" class="flex items-center space-x-2 text-white hover:text-gray-200 bg-blue-700 hover:bg-blue-800 px-4 py-2 rounded-lg transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                        </svg>
+                        <span>Home</span>
+                    </a>
+                    <img src="images/reports-icon.svg" alt="Reports" class="w-10 h-10">
+                    <h1 class="text-2xl font-bold">Reports Dashboard</h1>
+                </div>
+                <div class="flex items-center space-x-6">
+                    <button id="generateReportBtn" class="flex items-center space-x-2 px-4 py-2 bg-green-500 hover:bg-green-600 rounded-lg transition-all duration-300">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                        <span>Generate Report</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-6 py-8">
+        <!-- Report Types -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <a href="http://localhost/INT219&220/student_dropout_analysis/src/generatedreports.php" class="bg-white rounded-xl p-6 shadow-sm card-hover">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-gray-800">Generated Reports</h3>
+                    <span class="text-blue-500 bg-blue-50 px-2 py-1 rounded-full text-sm font-medium">24 Total</span>
+                </div>
+                <p class="text-3xl font-bold text-blue-600">12</p>
+                <p class="text-sm text-gray-500 mt-2">Reports this month</p>
+            </a>
+            <a href="http://localhost/INT219&220/student_dropout_analysis/src/scheduledreports.php" class="bg-white rounded-xl p-6 shadow-sm card-hover">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-gray-800">Scheduled Reports</h3>
+                    <span class="text-green-500 bg-green-50 px-2 py-1 rounded-full text-sm font-medium">Active</span>
+                </div>
+                <p class="text-3xl font-bold text-green-600">8</p>
+                <p class="text-sm text-gray-500 mt-2">Auto-generated weekly</p>
+            </a>
+            <a href="http://localhost/INT219&220/student_dropout_analysis/src/datasources.php" class="bg-white rounded-xl p-6 shadow-sm card-hover">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-gray-800">Data Sources</h3>
+                    <span class="text-purple-500 bg-purple-50 px-2 py-1 rounded-full text-sm font-medium">Connected</span>
+                </div>
+                <p class="text-3xl font-bold text-purple-600">5</p>
+                <p class="text-sm text-gray-500 mt-2">Active integrations</p>
+            </a>
+        </div>
+
+        <!-- Recent Reports -->
+        <div class="bg-white rounded-xl shadow-sm p-6 mb-8">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-bold text-gray-800">Recent Reports</h2>
+                <div class="flex items-center space-x-4">
+                    <div class="relative">
+                        <input type="text" placeholder="Search reports..." class="pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <svg class="w-5 h-5 text-gray-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                        </svg>
+                    </div>
+                    <select class="border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="all">All Reports</option>
+                        <option value="weekly">Weekly</option>
+                        <option value="monthly">Monthly</option>
+                        <option value="quarterly">Quarterly</option>
+                    </select>
+                </div>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead>
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Report Name</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Generated</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200" id="reportsTable">
+                        <!-- Reports will be dynamically added here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Report Generation Form -->
+        <div id="reportModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+            <div class="bg-white rounded-xl p-8 max-w-md w-full mx-4">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">Generate New Report</h2>
+                <form id="reportForm" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Report Type</label>
+                        <select class="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                            <option value="">Select type...</option>
+                            <option value="dropout">Dropout Analysis</option>
+                            <option value="intervention">Intervention Summary</option>
+                            <option value="demographic">Demographic Report</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Date Range</label>
+                        <div class="grid grid-cols-2 gap-4">
+                            <input type="date" class="border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                            <input type="date" class="border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Format</label>
+                        <div class="flex space-x-4">
+                            <label class="flex items-center">
+                                <input type="radio" name="format" value="pdf" class="mr-2">
+                                <span>PDF</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="format" value="excel" class="mr-2">
+                                <span>Excel</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="format" value="csv" class="mr-2">
+                                <span>CSV</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="flex justify-end space-x-4 mt-6">
+                        <button type="button" id="cancelReportBtn" class="px-4 py-2 text-gray-600 hover:text-gray-800">Cancel</button>
+                        <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">Generate</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Sample data for reports
+        const reports = [
+            { name: 'Weekly Dropout Analysis', type: 'weekly', date: '2025-04-15', status: 'completed' },
+            { name: 'Monthly Performance Report', type: 'monthly', date: '2025-04-01', status: 'completed' },
+            { name: 'Q1 Intervention Summary', type: 'quarterly', date: '2025-03-31', status: 'completed' },
+            { name: 'Demographics Analysis', type: 'monthly', date: '2025-04-10', status: 'pending' },
+            { name: 'Risk Assessment Report', type: 'weekly', date: '2025-04-14', status: 'processing' }
+        ];
+
+        // Initialize page when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Render reports table
+            renderReports(reports);
+
+            // Modal handlers
+            const modal = document.getElementById('reportModal');
+            const generateBtn = document.getElementById('generateReportBtn');
+            const cancelBtn = document.getElementById('cancelReportBtn');
+
+            generateBtn.addEventListener('click', () => {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            });
+
+            cancelBtn.addEventListener('click', () => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            });
+
+            // Form submission
+            document.getElementById('reportForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                // Handle form submission
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            });
+        });
+
+        function renderReports(data) {
+            const container = document.getElementById('reportsTable');
+            container.innerHTML = data.map(report => `
+                <tr class="hover:bg-gray-50 transition-colors">
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="flex items-center">
+                            <svg class="w-5 h-5 text-gray-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                            </svg>
+                            <span class="font-medium text-gray-900">${report.name}</span>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="px-2 py-1 text-xs font-medium rounded-full ${getTypeClass(report.type)}">
+                            ${report.type}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        ${report.date}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="px-2 py-1 text-xs font-medium rounded-full ${getStatusClass(report.status)}">
+                            ${report.status}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <button class="text-blue-600 hover:text-blue-900 mr-3">View</button>
+                        <button class="text-blue-600 hover:text-blue-900">Download</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function getTypeClass(type) {
+            const classes = {
+                weekly: 'bg-blue-100 text-blue-800',
+                monthly: 'bg-green-100 text-green-800',
+                quarterly: 'bg-purple-100 text-purple-800'
+            };
+            return classes[type] || 'bg-gray-100 text-gray-800';
+        }
+
+        function getStatusClass(status) {
+            const classes = {
+                completed: 'bg-green-100 text-green-800',
+                pending: 'bg-yellow-100 text-yellow-800',
+                processing: 'bg-blue-100 text-blue-800'
+            };
+            return classes[status] || 'bg-gray-100 text-gray-800';
+        }
+    </script>
+</body>
+</html>

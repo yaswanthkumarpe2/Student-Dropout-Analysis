@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics Dashboard - Student Dropout Analysis</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .glassmorphism {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .chart-container {
+            transition: all 0.3s ease;
+        }
+        .chart-container:hover {
+            transform: scale(1.02);
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #4F46E5, #7C3AED);
+        }
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 100%;
+            margin-top: 0.5rem;
+            min-width: 200px;
+        }
+        .dropdown-menu.show {
+            display: block;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Navigation -->
+    <nav class="gradient-bg text-white shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <a href="index.html" class="flex items-center space-x-2 text-white hover:text-gray-200 bg-blue-700 hover:bg-blue-800 px-4 py-2 rounded-lg transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                        </svg>
+                        <span>Home</span>
+                    </a>
+                    <img src="images/analytics-icon.svg" alt="Analytics" class="w-10 h-10">
+                    <h1 class="text-2xl font-bold">Analytics Dashboard</h1>
+                </div>
+                <div class="flex items-center space-x-6">
+                    <button id="filterButton" class="flex items-center space-x-2 bg-white/10 px-4 py-2 rounded-lg hover:bg-white/20 transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
+                        </svg>
+                        <span>Filter</span>
+                    </button>
+                    <div id="filterMenu" class="dropdown-menu bg-white rounded-lg shadow-lg py-2 text-gray-700">
+                        <!-- Class Filter -->
+                        <div class="px-4 py-2">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Class</label>
+                            <select class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                <option value="">All Classes</option>
+                                <option value="9">Class 9</option>
+                                <option value="10">Class 10</option>
+                                <option value="11">Class 11</option>
+                                <option value="12">Class 12</option>
+                            </select>
+                        </div>
+                        <!-- Section Filter -->
+                        <div class="px-4 py-2">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Section</label>
+                            <select class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                <option value="">All Sections</option>
+                                <option value="A">Section A</option>
+                                <option value="B">Section B</option>
+                                <option value="C">Section C</option>
+                                <option value="D">Section D</option>
+                            </select>
+                        </div>
+                        <!-- Program Filter -->
+                        <div class="px-4 py-2">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Program</label>
+                            <select class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                <option value="">All Programs</option>
+                                <option value="python">Python</option>
+                                <option value="java">Java</option>
+                                <option value="cpp">C++</option>
+                                <option value="html">HTML</option>
+                                <option value="r">R Language</option>
+                                <option value="mysql">MySQL</option>
+                                <option value="dsa">DSA</option>
+                                <option value="c">C</option>
+                            </select>
+                        </div>
+                        <!-- Date Range Filter -->
+                        <div class="px-4 py-2">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Time Period</label>
+                            <select class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                <option value="all">All Time</option>
+                                <option value="today">Today</option>
+                                <option value="week">This Week</option>
+                                <option value="month">This Month</option>
+                                <option value="quarter">This Quarter</option>
+                                <option value="year">This Year</option>
+                            </select>
+                        </div>
+                        <div class="border-t border-gray-100 mt-2 pt-2 px-4">
+                            <button class="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 transition-colors">
+                                Apply Filters
+                            </button>
+                        </div>
+                    </div>
+                    <button id="exportBtn" class="flex items-center space-x-2 bg-white/10 px-4 py-2 rounded-lg hover:bg-white/20 transition-all">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+                        </svg>
+                        <span>Export</span>
+                    </button>
+                    <div class="relative" id="timeRange">
+                        <select class="bg-white/10 rounded-lg px-4 py-2 appearance-none cursor-pointer hover:bg-white/20 transition-all">
+                            <option value="7days">Last 7 Days</option>
+                            <option value="30days">Last 30 Days</option>
+                            <option value="90days">Last 90 Days</option>
+                            <option value="1year">Last Year</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-6 py-8">
+        <!-- Stats Overview -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <!-- Total Dropouts -->
+            <div class="bg-white rounded-xl p-6 shadow-sm card-hover animate-fade-in">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-gray-800">Total Dropouts</h3>
+                    <svg class="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                    </svg>
+                </div>
+                <a href="total_dropouts.html" class="block hover:opacity-75 transition-opacity">
+                    <p class="text-3xl font-bold text-gray-900 mb-2">1,284</p>
+                    <div class="flex items-center text-sm text-gray-500">
+                        <span>Click to view details</span>
+                    </div>
+                </a>
+            </div>
+
+            <!-- At Risk Students -->
+            <div class="bg-white rounded-xl p-6 shadow-sm card-hover animate-fade-in" style="animation-delay: 0.1s;">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-gray-800">At Risk Students</h3>
+                    <svg class="w-8 h-8 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                    </svg>
+                </div>
+                <a href="risk.html" class="block hover:opacity-75 transition-opacity">
+                    <p class="text-3xl font-bold text-gray-900 mb-2">326</p>
+                    <div class="flex items-center text-sm text-gray-500">
+                        <span>Click to view details</span>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Intervention Success -->
+            <div class="bg-white rounded-xl p-6 shadow-sm card-hover animate-fade-in" style="animation-delay: 0.2s;">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-gray-800">Intervention Success</h3>
+                    <span class="text-green-500 bg-green-50 px-2 py-1 rounded-full text-sm font-medium">+8%</span>
+                </div>
+                <div class="flex items-center">
+                    <svg class="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                </div>
+                <a href="interventiondata.html" class="block hover:opacity-75 transition-opacity">
+                    <p class="text-3xl font-bold text-gray-900 mb-2">73.2%</p>
+                    <div class="flex items-center text-sm text-gray-500">
+                        <span>Click to view details</span>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Active Programs -->
+            <div class="bg-white rounded-lg p-6 shadow-sm card-hover animate-fade-in" style="animation-delay: 0.3s;">
+                <div class="flex justify-between items-start mb-4">
+                    <h3 class="text-lg font-semibold text-gray-800">Active Programs</h3>
+                    <span class="text-blue-500 bg-blue-50 px-2 py-1 rounded-full text-sm font-medium">8 Total</span>
+                </div>
+                <a href="http://localhost/INT219&220/student_dropout_analysis/src/Activeprograms.php" class="block hover:opacity-75 transition-opacity">
+                    <div class="flex items-center justify-between">
+                        <div class="space-y-1">
+                            <p class="text-3xl font-bold text-gray-900">8</p>
+                            <p class="text-sm text-gray-500">Click to view details</p>
+                        </div>
+                        <svg class="w-8 h-8 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+                        </svg>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            <!-- Dropout Trends -->
+            <div class="bg-white rounded-xl p-6 shadow-sm chart-container">
+                <h3 class="text-lg font-semibold text-gray-800 mb-6">Dropout Trends</h3>
+                <canvas id="dropoutTrend" class="w-full h-64"></canvas>
+            </div>
+
+            <!-- Demographics -->
+            <div class="bg-white rounded-xl p-6 shadow-sm chart-container">
+                <h3 class="text-lg font-semibold text-gray-800 mb-6">Demographics</h3>
+                <canvas id="demographics" class="w-full h-64"></canvas>
+            </div>
+        </div>
+
+        <!-- Detailed Analysis -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Risk Factors -->
+            <div class="bg-white rounded-xl p-6 shadow-sm">
+                <h3 class="text-lg font-semibold text-gray-800 mb-6">Top Risk Factors</h3>
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <span class="text-gray-600">Academic Performance</span>
+                        <div class="w-32 bg-gray-200 rounded-full h-2">
+                            <div class="bg-red-500 h-2 rounded-full" style="width: 75%"></div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-gray-600">Attendance</span>
+                        <div class="w-32 bg-gray-200 rounded-full h-2">
+                            <div class="bg-orange-500 h-2 rounded-full" style="width: 65%"></div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-gray-600">Financial Issues</span>
+                        <div class="w-32 bg-gray-200 rounded-full h-2">
+                            <div class="bg-yellow-500 h-2 rounded-full" style="width: 55%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Geographic Distribution -->
+            <div class="bg-white rounded-xl p-6 shadow-sm col-span-2">
+                <h3 class="text-lg font-semibold text-gray-800 mb-6">Geographic Distribution</h3>
+                <div id="geoMap" class="w-full h-80"></div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Filter dropdown functionality
+        const filterButton = document.getElementById('filterButton');
+        const filterMenu = document.getElementById('filterMenu');
+        
+        filterButton.addEventListener('click', () => {
+            filterMenu.classList.toggle('show');
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!filterButton.contains(e.target) && !filterMenu.contains(e.target)) {
+                filterMenu.classList.remove('show');
+            }
+        });
+
+        // Initialize charts when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Dropout Trends Chart
+            const dropoutCtx = document.getElementById('dropoutTrend').getContext('2d');
+            new Chart(dropoutCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    datasets: [{
+                        label: 'Dropouts',
+                        data: [65, 59, 80, 81, 56, 55],
+                        fill: false,
+                        borderColor: '#4F46E5',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            // Demographics Chart
+            const demoCtx = document.getElementById('demographics').getContext('2d');
+            new Chart(demoCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Male', 'Female', 'Others'],
+                    datasets: [{
+                        data: [45, 40, 15],
+                        backgroundColor: ['#4F46E5', '#EC4899', '#8B5CF6']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+
+            // Add interactivity to buttons
+            document.getElementById('filterBtn').addEventListener('click', function() {
+                // Implement filter functionality
+                console.log('Filter clicked');
+            });
+
+            document.getElementById('exportBtn').addEventListener('click', function() {
+                // Implement export functionality
+                console.log('Export clicked');
+            });
+
+            // Add hover effects to chart containers
+            document.querySelectorAll('.chart-container').forEach(container => {
+                container.addEventListener('mouseenter', function() {
+                    this.style.transform = 'scale(1.02)';
+                });
+                container.addEventListener('mouseleave', function() {
+                    this.style.transform = 'scale(1)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

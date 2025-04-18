@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback System - Student Dropout Analysis</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="../js/feedback.js" defer></script>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-blue-600 text-white shadow-lg mb-8">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="text-xl font-bold">Student Dropout Analysis</div>
+                <div class="hidden md:flex space-x-6">
+                    <a href="../index.html" class="hover:text-gray-200">Dashboard</a>
+                    <a href="feedback.html" class="hover:text-gray-200">Feedback</a>
+                    <a href="../resources/resources.html" class="hover:text-gray-200">Resources</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto px-6">
+        <!-- Feedback Forms Section -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+            <!-- Teacher Feedback -->
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-xl font-semibold mb-4">Teacher Feedback</h3>
+                <form id="teacherFeedbackForm" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Student Name</label>
+                        <input type="text" name="studentName" class="w-full border rounded-md p-2" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Academic Performance</label>
+                        <select name="academicPerformance" class="w-full border rounded-md p-2" required>
+                            <option value="">Select Rating</option>
+                            <option value="excellent">Excellent</option>
+                            <option value="good">Good</option>
+                            <option value="average">Average</option>
+                            <option value="poor">Poor</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Attendance</label>
+                        <input type="number" name="attendance" min="0" max="100" class="w-full border rounded-md p-2" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Recommendations</label>
+                        <textarea name="recommendations" class="w-full border rounded-md p-2" rows="3" required></textarea>
+                    </div>
+                    <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700">
+                        Submit Feedback
+                    </button>
+                </form>
+            </div>
+
+            <!-- Student Survey -->
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-xl font-semibold mb-4">Student Survey</h3>
+                <form id="studentSurveyForm" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Main Challenges</label>
+                        <select name="challenges" multiple class="w-full border rounded-md p-2" required>
+                            <option value="financial">Financial Issues</option>
+                            <option value="academic">Academic Difficulty</option>
+                            <option value="distance">Distance from School</option>
+                            <option value="family">Family Issues</option>
+                            <option value="health">Health Issues</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Support Needed</label>
+                        <textarea name="supportNeeded" class="w-full border rounded-md p-2" rows="3" required></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Satisfaction with School</label>
+                        <div class="flex items-center space-x-2">
+                            <input type="range" name="satisfaction" min="1" max="5" class="w-full" required
+                                oninput="this.nextElementSibling.textContent = this.value + ' / 5'">
+                            <span class="text-sm font-medium text-gray-600">3 / 5</span>
+                        </div>
+                    </div>
+                    <button type="submit" class="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700">
+                        Submit Survey
+                    </button>
+                </form>
+            </div>
+
+            <!-- Parent Feedback -->
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-xl font-semibold mb-4">Parent Feedback</h3>
+                <form id="parentFeedbackForm" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Student Name</label>
+                        <input type="text" name="studentName" class="w-full border rounded-md p-2" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Main Concerns</label>
+                        <textarea name="concerns" class="w-full border rounded-md p-2" rows="3" required></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Suggestions for Improvement</label>
+                        <textarea name="suggestions" class="w-full border rounded-md p-2" rows="3" required></textarea>
+                    </div>
+                    <button type="submit" class="w-full bg-purple-600 text-white py-2 rounded-md hover:bg-purple-700">
+                        Submit Feedback
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Feedback Analysis -->
+        <div class="bg-white p-6 rounded-lg shadow-md mb-8">
+            <h3 class="text-xl font-semibold mb-4">Feedback Analysis</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                    <canvas id="feedbackChart"></canvas>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-2">Key Insights</h4>
+                    <ul class="space-y-2 text-gray-600" id="feedbackInsights">
+                        <!-- Populated by JavaScript -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Feedback Dialog -->
+    <div id="feedbackDialog" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center">
+        <div class="bg-white p-6 rounded-lg shadow-xl max-w-md w-full mx-4">
+            <h4 class="text-xl font-semibold mb-4" id="dialogTitle">Feedback Submitted</h4>
+            <div id="dialogContent" class="text-gray-600 mb-4"></div>
+            <div class="flex justify-end">
+                <button onclick="closeDialog()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Feedback Display -->
+    <div class="container mx-auto px-6 mb-8">
+        <div class="bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold mb-4">Recent Feedback</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="recentFeedback">
+                <!-- Teacher Feedback Column -->
+                <div>
+                    <h4 class="font-semibold text-blue-600 mb-2">Teacher Feedback</h4>
+                    <div id="teacherFeedbackList" class="space-y-3"></div>
+                </div>
+                <!-- Student Survey Column -->
+                <div>
+                    <h4 class="font-semibold text-green-600 mb-2">Student Survey</h4>
+                    <div id="studentFeedbackList" class="space-y-3"></div>
+                </div>
+                <!-- Parent Feedback Column -->
+                <div>
+                    <h4 class="font-semibold text-purple-600 mb-2">Parent Feedback</h4>
+                    <div id="parentFeedbackList" class="space-y-3"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

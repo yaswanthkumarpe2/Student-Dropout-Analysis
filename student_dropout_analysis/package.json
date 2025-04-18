@@ -1,0 +1,11 @@
+{
+  "name": "student-dropout-analysis",
+  "version": "1.0.0",
+  "description": "Student Dropout Analysis System for School Education",
+  "scripts": {
+    "build:css": "tailwindcss -i ./src/css/input.css -o ./public/css/styles.css --watch"
+  },
+  "dependencies": {
+    "tailwindcss": "^3.3.0"
+  }
+}

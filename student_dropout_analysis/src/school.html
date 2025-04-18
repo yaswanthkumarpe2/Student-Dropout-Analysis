@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Analysis - Student Dropout Analysis</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/main.js" defer></script>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-blue-600 text-white shadow-lg">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="text-xl font-bold">
+                    Student Dropout Analysis
+                </div>
+                <div class="hidden md:flex space-x-6">
+                    <a href="index.html" class="hover:text-gray-200">Dashboard</a>
+                    <a href="school.html" class="hover:text-gray-200">School Analysis</a>
+                    <a href="area.html" class="hover:text-gray-200">Area Analysis</a>
+                    <a href="gender.html" class="hover:text-gray-200">Gender Analysis</a>
+                    <a href="caste.html" class="hover:text-gray-200">Caste Analysis</a>
+                    <a href="age.html" class="hover:text-gray-200">Age Analysis</a>
+                </div>
+                <button id="mobile-menu-button" class="md:hidden">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <div id="mobile-menu" class="hidden md:hidden">
+            <div class="px-4 py-3 space-y-2">
+                <a href="index.html" class="block hover:text-gray-200">Dashboard</a>
+                <a href="school.html" class="block hover:text-gray-200">School Analysis</a>
+                <a href="area.html" class="block hover:text-gray-200">Area Analysis</a>
+                <a href="gender.html" class="block hover:text-gray-200">Gender Analysis</a>
+                <a href="caste.html" class="block hover:text-gray-200">Caste Analysis</a>
+                <a href="age.html" class="block hover:text-gray-200">Age Analysis</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-6 py-8">
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-800 mb-4">School-wise Dropout Analysis</h1>
+            <p class="text-gray-600">Detailed analysis of dropout rates across different schools.</p>
+        </div>
+
+        <!-- Filters -->
+        <div class="bg-white p-6 rounded-lg shadow-md mb-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Area Type</label>
+                    <select class="w-full border border-gray-300 rounded-md px-3 py-2">
+                        <option value="">All Areas</option>
+                        <option value="urban">Urban</option>
+                        <option value="rural">Rural</option>
+                        <option value="semi-urban">Semi-Urban</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">School Type</label>
+                    <select class="w-full border border-gray-300 rounded-md px-3 py-2">
+                        <option value="">All Types</option>
+                        <option value="government">Government</option>
+                        <option value="private">Private</option>
+                        <option value="aided">Government Aided</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Sort By</label>
+                    <select class="w-full border border-gray-300 rounded-md px-3 py-2">
+                        <option value="rate-high">Highest Dropout Rate</option>
+                        <option value="rate-low">Lowest Dropout Rate</option>
+                        <option value="students">Total Students</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-lg font-semibold text-gray-800 mb-2">Average Dropout Rate</h3>
+                <p class="text-3xl font-bold text-blue-600">8.5%</p>
+                <p class="text-sm text-gray-500 mt-2">Across all schools</p>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-lg font-semibold text-gray-800 mb-2">Highest Rate</h3>
+                <p class="text-3xl font-bold text-red-600">15.2%</p>
+                <p class="text-sm text-gray-500 mt-2">Rural High School</p>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-lg font-semibold text-gray-800 mb-2">Lowest Rate</h3>
+                <p class="text-3xl font-bold text-green-600">2.1%</p>
+                <p class="text-sm text-gray-500 mt-2">City Public School</p>
+            </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-xl font-semibold text-gray-800 mb-4">Dropout Rates by School</h3>
+                <canvas id="schoolDropoutChart"></canvas>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-xl font-semibold text-gray-800 mb-4">School Type Comparison</h3>
+                <canvas id="schoolTypeChart"></canvas>
+            </div>
+        </div>
+
+        <!-- School List -->
+        <div class="bg-white rounded-lg shadow-md">
+            <div class="px-6 py-4 border-b border-gray-200">
+                <h3 class="text-xl font-semibold text-gray-800">School-wise Details</h3>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="min-w-full">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">School Name</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Area</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Students</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Dropout Rate</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap">City Public School</td>
+                            <td class="px-6 py-4 whitespace-nowrap">Government</td>
+                            <td class="px-6 py-4 whitespace-nowrap">Urban</td>
+                            <td class="px-6 py-4 whitespace-nowrap">1,200</td>
+                            <td class="px-6 py-4 whitespace-nowrap">2.1%</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                    Good
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap">Rural High School</td>
+                            <td class="px-6 py-4 whitespace-nowrap">Government</td>
+                            <td class="px-6 py-4 whitespace-nowrap">Rural</td>
+                            <td class="px-6 py-4 whitespace-nowrap">800</td>
+                            <td class="px-6 py-4 whitespace-nowrap">15.2%</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                                    Critical
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white mt-12">
+        <div class="container mx-auto px-6 py-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">About</h3>
+                    <p class="text-gray-400">Student Dropout Analysis System helps government and educational institutions analyze and address dropout rates through data-driven insights.</p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="index.html" class="hover:text-white">Dashboard</a></li>
+                        <li><a href="school.html" class="hover:text-white">School Analysis</a></li>
+                        <li><a href="area.html" class="hover:text-white">Area Analysis</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Contact</h3>
+                    <ul class="space-y-2 text-gray-400">
+                        <li>Email: yaswanthstar2005@gmail.com</li>
+                        <li>Phone: +91 9133954154</li>
+                        <li>Address: Lovely Professional University, Punjab</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-6 text-center text-gray-400">
+                <p>&copy; 2025 Student Dropout Analysis. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Charts
+        document.addEventListener('DOMContentLoaded', function() {
+            // School Dropout Chart
+            const schoolCtx = document.getElementById('schoolDropoutChart').getContext('2d');
+            new Chart(schoolCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['City Public School', 'Rural High School', 'Model School', 'Central School', 'Township School'],
+                    datasets: [{
+                        label: 'Dropout Rate (%)',
+                        data: [2.1, 15.2, 8.5, 5.3, 7.8],
+                        backgroundColor: 'rgba(59, 130, 246, 0.5)',
+                        borderColor: 'rgb(59, 130, 246)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Dropout Rate (%)'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // School Type Chart
+            const typeCtx = document.getElementById('schoolTypeChart').getContext('2d');
+            new Chart(typeCtx, {
+                type: 'pie',
+                data: {
+                    labels: ['Government', 'Private', 'Aided'],
+                    datasets: [{
+                        data: [45, 30, 25],
+                        backgroundColor: [
+                            'rgba(59, 130, 246, 0.5)',
+                            'rgba(16, 185, 129, 0.5)',
+                            'rgba(245, 158, 11, 0.5)'
+                        ],
+                        borderColor: [
+                            'rgb(59, 130, 246)',
+                            'rgb(16, 185, 129)',
+                            'rgb(245, 158, 11)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        },
+                        title: {
+                            display: true,
+                            text: 'Distribution by School Type'
+                        }
+                    }
+                }
+            });
+        });
+
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-button').addEventListener('click', function() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+    </script>
+</body>
+</html>

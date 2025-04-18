@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resource Management - Student Dropout Analysis</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="../js/resources.js" defer></script>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-blue-600 text-white shadow-lg mb-8">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="text-xl font-bold">Student Dropout Analysis</div>
+                <div class="hidden md:flex space-x-6">
+                    <a href="../index.html" class="hover:text-gray-200">Dashboard</a>
+                    <a href="../feedback/feedback.html" class="hover:text-gray-200">Feedback</a>
+                    <a href="resources.html" class="hover:text-gray-200">Resources</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto px-6">
+        <!-- Budget Overview -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-lg font-semibold text-gray-800 mb-2">Total Budget</h3>
+                <p class="text-3xl font-bold text-blue-600">₹50,00,000</p>
+                <p class="text-sm text-gray-500 mt-2">Financial Year 2025-26</p>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-lg font-semibold text-gray-800 mb-2">Allocated</h3>
+                <p class="text-3xl font-bold text-green-600">₹35,00,000</p>
+                <p class="text-sm text-gray-500 mt-2">70% of total budget</p>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-lg font-semibold text-gray-800 mb-2">Available</h3>
+                <p class="text-3xl font-bold text-yellow-600">₹15,00,000</p>
+                <p class="text-sm text-gray-500 mt-2">30% remaining</p>
+            </div>
+        </div>
+
+        <!-- Resource Allocation -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+            <!-- Budget Allocation Chart -->
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-xl font-semibold mb-4">Budget Allocation</h3>
+                <canvas id="budgetChart"></canvas>
+            </div>
+            <!-- Resource Effectiveness -->
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-xl font-semibold mb-4">Resource Effectiveness</h3>
+                <canvas id="effectivenessChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Resource Tracking -->
+        <div class="bg-white rounded-lg shadow-md mb-8">
+            <div class="px-6 py-4 border-b border-gray-200">
+                <h3 class="text-xl font-semibold">Resource Tracking</h3>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="min-w-full">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Resource</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Allocated Budget</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Utilized</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Impact Score</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap">Counseling Services</td>
+                            <td class="px-6 py-4 whitespace-nowrap">₹10,00,000</td>
+                            <td class="px-6 py-4 whitespace-nowrap">₹7,50,000</td>
+                            <td class="px-6 py-4 whitespace-nowrap">85%</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                    Active
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap">Transportation</td>
+                            <td class="px-6 py-4 whitespace-nowrap">₹15,00,000</td>
+                            <td class="px-6 py-4 whitespace-nowrap">₹12,00,000</td>
+                            <td class="px-6 py-4 whitespace-nowrap">75%</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                                    Review
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Add New Resource -->
+        <div class="bg-white rounded-lg shadow-md">
+            <div class="px-6 py-4 border-b border-gray-200">
+                <h3 class="text-xl font-semibold">Add New Resource</h3>
+            </div>
+            <div class="p-6">
+                <form id="resourceForm" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Resource Name</label>
+                        <input type="text" class="w-full border rounded-md p-2" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Budget Amount</label>
+                        <input type="number" class="w-full border rounded-md p-2" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Category</label>
+                        <select class="w-full border rounded-md p-2" required>
+                            <option value="">Select Category</option>
+                            <option value="counseling">Counseling</option>
+                            <option value="transportation">Transportation</option>
+                            <option value="academic">Academic Support</option>
+                            <option value="infrastructure">Infrastructure</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Duration (months)</label>
+                        <input type="number" class="w-full border rounded-md p-2" required>
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                        <textarea class="w-full border rounded-md p-2" rows="3" required></textarea>
+                    </div>
+                    <div class="md:col-span-2">
+                        <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700">
+                            Add Resource
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
